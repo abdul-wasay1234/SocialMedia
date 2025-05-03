@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <!-- Main content area -->
+        {% if current_user.is_authenticated %}
+            <!-- Photo feed would go here -->
+            {% if photos is defined and photos %}
+                {% for photo in photos %}
+                    <div class="card mb-4">
+                        <div class="card-header d-flex align-items-center">
+                            <img src="{{ url_for('static', filename='images/default-profile.jpg') }}" alt="Profile Picture" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                            <a href="#" class="post-username text-decoration-none">{{ photo.user.username }}</a>
+                        </div>
+                        
+                        <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}" class="card-img-top" alt="{{ photo.title }}">
+                        
+                        <div class="post-actions">
+                            <button><i class="far fa-heart"></i></button>
+                            <button><i class="far fa-comment"></i></button>
+                            <button><i class="far fa-paper-plane"></i></button>
+                        </div>
+                        
+                        <div class="post-likes">
+                            0 likes
+                        </div>
+                        
+                        <div class="post-caption">
+                            <span class="post-username">{{ photo.user.username }}</span> {{ photo.description }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="card">
+                    <div class="card-body">
+                        <p class="mb-0">No photos available. Follow creators or explore the gallery!</p>
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <!-- Welcome message for non-authenticated users -->
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <h1 class="display-4 mb-4">Welcome to InstaShare!</h1>
+                    <p class="lead mb-4">A stylish platform for sharing photos with friends and family.</p>
+                    <div class="mb-4" style="background: var(--instagram-gradient); height: 2px;"></div>
+                    <p class="mb-4">Join today as a creator to upload photos or as a consumer to view, comment, and rate photos.</p>
+                    <div class="mt-4">
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg me-2">Sign Up</a>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-lg">Log In</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-md-4">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            {% if current_user.is_authenticated %}
+                <div class="card mb-4">
+                    <div class="card-body d-flex align-items-center">
+                        <img src="{{ url_for('static', filename='images/default-profile.jpg') }}" alt="Profile Picture" class="rounded-circle me-3" style="width: 56px; height: 56px; object-fit: cover;">
+                        <div>
+                            <h6 class="mb-0">{{ current_user.username }}</h6>
+                            <span class="text-muted">{{ current_user.role }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h6 class="mb-0">Suggestions For You</h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">No suggestions available right now.</p>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">About InstaShare</h5>
+                        <p class="card-text">InstaShare is a modern photo sharing platform with beautiful designs inspired by popular social media applications.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-camera text-primary me-2"></i> Share your best moments</li>
+                            <li><i class="fas fa-heart text-danger me-2"></i> Get likes from your followers</li>
+                            <li><i class="fas fa-comment text-success me-2"></i> Engage in conversations</li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
