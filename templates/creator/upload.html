@@ -1,60 +1,100 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-6 offset-md-3">
-        <h1>Upload Media</h1>
-        <form action="" method="post" enctype="multipart/form-data" novalidate>
-            {{ form.hidden_tag() }}
-            <div class="mb-3">
-                {{ form.media_type.label(class="form-label") }}
-                {{ form.media_type(class="form-select") }}
-                {% for error in form.media_type.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h3 class="card-title mb-0">Create New Post</h3>
             </div>
-            <div class="mb-3">
-                {{ form.media_file.label(class="form-label") }}
-                {{ form.media_file(class="form-control") }}
-                {% for error in form.media_file.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
-                <div class="form-text" id="photoHelp" style="display: none;">Upload a JPG, PNG, or GIF file (max 5MB)</div>
-                <div class="form-text" id="videoHelp" style="display: none;">Upload a MP4, MOV, or AVI file (max 50MB)</div>
+            <div class="card-body">
+                <form action="" method="post" enctype="multipart/form-data" novalidate>
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="upload-preview-container text-center p-4 mb-3 border rounded" style="min-height: 300px; background-color: #fafafa; display: flex; align-items: center; justify-content: center;">
+                                <div id="preview-placeholder">
+                                    <i class="fas fa-cloud-upload-alt fa-4x text-muted mb-3"></i>
+                                    <p class="text-muted">Preview will appear here</p>
+                                </div>
+                                <img id="image-preview" style="max-width: 100%; max-height: 300px; display: none;" alt="Preview">
+                                <video id="video-preview" controls style="max-width: 100%; max-height: 300px; display: none;"></video>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.media_type.label(class="form-label fw-bold") }}
+                                {{ form.media_type(class="form-select") }}
+                                {% for error in form.media_type.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    {{ form.media_file.label(class="form-label fw-bold mb-0") }}
+                                    <span class="badge bg-light text-dark" id="fileTypeLabel">Select a file</span>
+                                </div>
+                                {{ form.media_file(class="form-control", style="padding: 0.8rem 0.75rem;") }}
+                                {% for error in form.media_file.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                                <div class="form-text" id="photoHelp" style="display: none;"><i class="fas fa-info-circle me-1"></i> Upload a JPG, PNG, or GIF file (max 5MB)</div>
+                                <div class="form-text" id="videoHelp" style="display: none;"><i class="fas fa-info-circle me-1"></i> Upload a MP4, MOV, or AVI file (max 50MB)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.title.label(class="form-label fw-bold") }}
+                                {{ form.title(class="form-control", placeholder="Add a title...") }}
+                                {% for error in form.title.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.caption.label(class="form-label fw-bold") }}
+                                {{ form.caption(class="form-control", rows=3, placeholder="Write a caption...") }}
+                                {% for error in form.caption.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.location.label(class="form-label fw-bold") }}
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                    {{ form.location(class="form-control", placeholder="Add location...") }}
+                                </div>
+                                {% for error in form.location.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.people.label(class="form-label fw-bold") }}
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                    {{ form.people(class="form-control", placeholder="e.g. John Doe, Jane Smith") }}
+                                </div>
+                                {% for error in form.people.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                                <div class="form-text"><i class="fas fa-info-circle me-1"></i> Enter names of people, separated by commas</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ url_for('creator.dashboard') }}" class="btn btn-light me-2">Cancel</a>
+                        {{ form.submit(class="btn btn-primary px-4", value="Share") }}
+                    </div>
+                </form>
             </div>
-            <div class="mb-3">
-                {{ form.title.label(class="form-label") }}
-                {{ form.title(class="form-control") }}
-                {% for error in form.title.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="mb-3">
-                {{ form.caption.label(class="form-label") }}
-                {{ form.caption(class="form-control", rows=3) }}
-                {% for error in form.caption.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="mb-3">
-                {{ form.location.label(class="form-label") }}
-                {{ form.location(class="form-control") }}
-                {% for error in form.location.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="mb-3">
-                {{ form.people.label(class="form-label") }}
-                {{ form.people(class="form-control") }}
-                {% for error in form.people.errors %}
-                <span class="text-danger">{{ error }}</span>
-                {% endfor %}
-                <div class="form-text">Enter names of people, separated by commas</div>
-            </div>
-            <div class="d-grid gap-2">
-                {{ form.submit(class="btn btn-primary") }}
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -64,16 +104,46 @@
         const mediaTypeSelect = document.getElementById('media_type');
         const photoHelp = document.getElementById('photoHelp');
         const videoHelp = document.getElementById('videoHelp');
+        const fileTypeLabel = document.getElementById('fileTypeLabel');
+        const mediaFileInput = document.getElementById('media_file');
+        
+        const imagePreview = document.getElementById('image-preview');
+        const videoPreview = document.getElementById('video-preview');
+        const previewPlaceholder = document.getElementById('preview-placeholder');
         
         function updateHelpText() {
             if (mediaTypeSelect.value === 'photo') {
                 photoHelp.style.display = 'block';
                 videoHelp.style.display = 'none';
+                fileTypeLabel.textContent = 'Photo';
             } else {
                 photoHelp.style.display = 'none';
                 videoHelp.style.display = 'block';
+                fileTypeLabel.textContent = 'Video';
             }
         }
+        
+        // Handle file preview
+        mediaFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) {
+                return;
+            }
+            
+            const fileUrl = URL.createObjectURL(file);
+            
+            if (file.type.startsWith('image/')) {
+                imagePreview.src = fileUrl;
+                imagePreview.style.display = 'block';
+                videoPreview.style.display = 'none';
+                previewPlaceholder.style.display = 'none';
+            } else if (file.type.startsWith('video/')) {
+                videoPreview.src = fileUrl;
+                videoPreview.style.display = 'block';
+                imagePreview.style.display = 'none';
+                previewPlaceholder.style.display = 'none';
+            }
+        });
         
         // Initial update
         updateHelpText();
